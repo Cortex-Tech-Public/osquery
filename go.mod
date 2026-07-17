@@ -1,6 +1,6 @@
 module github.com/Cortex-Tech-Public/osquery/v3
 
-go 1.25.9
+go 1.26.5
 
 require (
 	github.com/fatih/structs v1.1.0
