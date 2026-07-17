@@ -65,7 +65,7 @@ func (req *CountRequest) Run(
 	var searchResp opensearchapi.SearchResp
 
 	// Execute the search request using the OpenSearch client's Do method
-	if _, err := client.Do(ctx, http.MethodPost, searchReq, &searchResp); err != nil {
+	if _, err := opensearch.Do(ctx, client, http.MethodPost, searchReq, &searchResp); err != nil {
 		return nil, fmt.Errorf("search request failed: %w", err)
 	}
 
