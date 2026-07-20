@@ -1,37 +1,12 @@
-[![Go Reference](https://pkg.go.dev/badge/github.com/defensestation/osquery@v2.0.0#section-documentation.svg)](https://pkg.go.dev/github.com/defensestation/osquery/v2)[![CircleCI](https://dl.circleci.com/status-badge/img/gh/defensestation/osquery/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/defensestation/osquery/tree/master)
+[![Go Reference](https://pkg.go.dev/badge/github.com/Cortex-Tech-Public/osquery.svg)](https://pkg.go.dev/github.com/Cortex-Tech-Public/osquery)
 
 # osquery
 
-This project is based on [esquery](https://github.com/aquasecurity/esquery) which is licensed under the Apache License 2.0.
+A non-obtrusive, idiomatic, and easy-to-use query and aggregation builder for the [official Go client](https://github.com/opensearch-project/opensearch-go) for [OpenSearch](https://opensearch.org/).
 
-## Modifications
+This project is a maintained fork of defensestation/osquery, kept compatible with current releases of opensearch-go.
 
-- Updated ElasticSearch client to OpenSearch client
-- Changed package name to 'osquery'
-- Updated references to OpenSearch documentation
-- Modified examples accordingly
-
-#### Major Breaking Change Update in osquery v2.0.0
-
-To support ```github.com/opensearch-project/opensearch-go/v4```, in the osquery version 2, the ```Run``` method has been changed. It takes ```context```, ```client```, and ```osquery.Options{}```, as arguments. 
-
-Search Response type has been changed to ```*opensearchapi.SearchResp``` instead of ```*opensearchapi.Response```
-
-### Upgrading to v2
-
-Starting from `v2.0.0`, the module path has changed. To upgrade, update your `go.mod` file to:
-
-```bash
-go get github.com/defensestation/osquery/v2
-```
-
-## License
-
-This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
-
- 
-
-**OpenSeach Query Builder for Go. A non-obtrusive, idiomatic and easy-to-use query and aggregation builder for the [official Go client](https://github.com/opensearch-project/opensearch-go/v4) for [OpenSearch](https://opensearch.org/docs/latest/clients/go/).**
+Based on [esquery](https://github.com/aquasecurity/esquery), licensed under the Apache License 2.0.
 
 ## Table of Contents
 
@@ -45,6 +20,7 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENS
       * [Supported Queries](#supported-queries)
       * [Supported Aggregations](#supported-aggregations)
       * [Custom Queries and Aggregations](#custom-queries-and-aggregations)
+   * [Upgrading](#upgrading)
    * [License](#license)
 <!--te-->
 
@@ -52,25 +28,21 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENS
 
 `osquery` alleviates the need to use extremely nested maps (`map[string]interface{}`) and serializing queries to JSON manually. It also helps eliminating common mistakes such as misspelling query types, as everything is statically typed.
 
-Using `osquery` can make your code much easier to write, read and maintain, and significantly reduce the amount of code you write. Wanna know how much code you'll save? just check this project's tests.
+Using `osquery` can make your code much easier to write, read and maintain, and significantly reduce the amount of code you write.
 
 ## Status
 
-This is an early release, API may still change.
+This is an early release. The API may still change.
 
 ## Installation
 
-`osquery` is a Go module. To install, simply run this in your project's root directory:
-
 ```bash
-go get github.com/defensestation/osquery/v2
+go get github.com/Cortex-Tech-Public/osquery
 ```
 
 ## Usage
 
-osquery provides a [method chaining](https://en.wikipedia.org/wiki/Method_chaining)-style API for building and executing queries and aggregations. It does not wrap the official Go client nor does it require you to change your existing code in order to integrate the library. Queries can be directly built with `osquery`, and executed by passing an `*opensearch.Client` instance (with optional search parameters). Results are returned as-is from the official client (e.g. `*opensearchapi.Response` objects).
-
-Getting started is extremely simple:
+osquery provides a [method chaining](https://en.wikipedia.org/wiki/Method_chaining)-style API for building and executing queries and aggregations. It does not wrap the official Go client nor does it require you to change your existing code in order to integrate the library. Queries can be directly built with `osquery`, and executed by passing an `*opensearch.Client` instance (with optional search parameters). Results are returned as-is from the official client.
 
 ```go
 package main
@@ -79,50 +51,47 @@ import (
 	"context"
 	"log"
 
-	"github.com/defensestation/osquery"
+	"github.com/Cortex-Tech-Public/osquery"
 	"github.com/opensearch-project/opensearch-go/v4"
 )
 
 func main() {
-    // connect to an OpenSearch instance
-    osclient, err := opensearch.NewDefaultClient()
-    if err != nil {
-        log.Fatalf("Failed creating client: %s", err)
-    }
+	// connect to an OpenSearch instance
+	osclient, err := opensearch.NewDefaultClient()
+	if err != nil {
+		log.Fatalf("Failed creating client: %s", err)
+	}
 
-    // run a boolean search query
-    res, err := osquery.Search().
-        Query(
-            osquery.
-                Bool().
-                Must(osquery.Term("title", "Go and Stuff")).
-                Filter(osquery.Term("tag", "tech")),
-        ).
-        Aggs(
-            osquery.Avg("average_score", "score"),
-            osquery.Max("max_score", "score"),
-        ).
-        Size(20).
-        Run(
-            context.TODO(),
-            osclient,
-            &osquery.Options{
-                Indices: []string{"test"},
-            },
-        )
-        if err != nil {
-            log.Fatalf("Failed searching for stuff: %s", err)
-        }
+	// run a boolean search query
+	res, err := osquery.Search().
+		Query(
+			osquery.
+				Bool().
+				Must(osquery.Term("title", "Go and Stuff")).
+				Filter(osquery.Term("tag", "tech")),
+		).
+		Aggs(
+			osquery.Avg("average_score", "score"),
+			osquery.Max("max_score", "score"),
+		).
+		Size(20).
+		Run(
+			context.TODO(),
+			osclient,
+			&osquery.Options{
+				Indices: []string{"test"},
+			},
+		)
+	if err != nil {
+		log.Fatalf("Failed searching for stuff: %s", err)
+	}
 
-    defer res.Body.Close()
-
-    // ...
+	defer res.Body.Close()
 }
 ```
 
 ## Notes
 
-* `osquery` currently supports version 7 of the OpenSearch Go client.
 * The library cannot currently generate "short queries". For example, whereas
   OpenSearch can accept this:
 
@@ -144,10 +113,8 @@ func main() {
 
 ### Supported Queries
 
-The following queries are currently supported:
-
-| OpenSearch DSL       | `osquery` Function    |
-| ------------------------|---------------------- |
+| OpenSearch DSL          | `osquery` Function    |
+| ------------------------|-----------------------|
 | `"match"`               | `Match()`             |
 | `"match_bool_prefix"`   | `MatchBoolPrefix()`   |
 | `"match_phrase"`        | `MatchPhrase()`       |
@@ -172,43 +139,51 @@ The following queries are currently supported:
 
 ### Supported Aggregations
 
-The following aggregations are currently supported:
-
-| OpenSearch DSL       | `osquery` Function    |
-| ------------------------|---------------------- |
-| `"avg"`                 | `Avg()`               |
-| `"weighted_avg"`        | `WeightedAvg()`       |
-| `"cardinality"`         | `Cardinality()`       |
-| `"max"`                 | `Max()`               |
-| `"min"`                 | `Min()`               |
-| `"sum"`                 | `Sum()`               |
-| `"value_count"`         | `ValueCount()`        |
-| `"percentiles"`         | `Percentiles()`       |
-| `"stats"`               | `Stats()`             |
-| `"string_stats"`        | `StringStats()`       |
-| `"top_hits"`            | `TopHits()`           |
-| `"terms"`               | `TermsAgg()`          |
+| OpenSearch DSL       | `osquery` Function |
+| ---------------------|-------------------|
+| `"avg"`              | `Avg()`           |
+| `"weighted_avg"`     | `WeightedAvg()`   |
+| `"cardinality"`      | `Cardinality()`   |
+| `"max"`              | `Max()`           |
+| `"min"`              | `Min()`           |
+| `"sum"`              | `Sum()`           |
+| `"value_count"`      | `ValueCount()`    |
+| `"percentiles"`      | `Percentiles()`   |
+| `"stats"`            | `Stats()`         |
+| `"string_stats"`     | `StringStats()`   |
+| `"top_hits"`         | `TopHits()`       |
+| `"terms"`            | `TermsAgg()`      |
 
 ### Supported Top Level Options
 
-The following top level options are currently supported:
+| OpenSearch DSL  | `osquery.Search` Function            |
+| ----------------|--------------------------------------|
+| `"highlight"`   | `Highlight()`                        |
+| `"explain"`     | `Explain()`                          |
+| `"from"`        | `From()`                             |
+| `"postFilter"`  | `PostFilter()`                       |
+| `"query"`       | `Query()`                            |
+| `"aggs"`        | `Aggs()`                             |
+| `"size"`        | `Size()`                             |
+| `"sort"`        | `Sort()`                             |
+| `"source"`      | `SourceIncludes(), SourceExcludes()` |
+| `"timeout"`     | `Timeout()`                          |
 
-| OpenSearch DSL       | `osquery.Search` Function              |
-| ------------------------|--------------------------------------- |
-| `"highlight"`           | `Highlight()`                          |
-| `"explain"`             | `Explain()`                            |
-| `"from"`                | `From()`                               |
-| `"postFilter"`          | `PostFilter()`                         |
-| `"query"`               | `Query()`                              |
-| `"aggs"`                | `Aggs()`                               |
-| `"size"`                | `Size()`                               |
-| `"sort"`                | `Sort()`                               |
-| `"source"`              | `SourceIncludes(), SourceExcludes()`   |
-| `"timeout"`             | `Timeout()`                            |
-
-#### Custom Queries and Aggregations
+### Custom Queries and Aggregations
 
 To execute an arbitrary query or aggregation (including those not yet supported by the library), use the `CustomQuery()` or `CustomAgg()` functions, respectively. Both accept any `map[string]interface{}` value.
+
+## Upgrading
+
+### From defensestation/osquery v2
+
+Update your import path:
+
+```bash
+go get github.com/Cortex-Tech-Public/osquery
+```
+
+Replace all imports of `github.com/defensestation/osquery/v2` with `github.com/Cortex-Tech-Public/osquery`. No API changes — the only requirement is opensearch-go v4.7.0 or later.
 
 ## License
 

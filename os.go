@@ -36,7 +36,7 @@
 //         "context"
 //         "log"
 //
-//         "github.com/defensestatuib/osquery"
+//         "github.com/Cortex-Tech-Public/osquery"
 //         opensearch "github.com/opensearch-project/opensearch-go/v4"
 //     )
 //
