@@ -1,4 +1,4 @@
-module github.com/Cortex-Tech-Public/osquery/v3
+module github.com/Cortex-Tech-Public/osquery
 
 go 1.26.5
 

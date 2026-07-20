@@ -1,4 +1,4 @@
-[![Go Reference](https://pkg.go.dev/badge/github.com/Cortex-Tech-Public/osquery/v3.svg)](https://pkg.go.dev/github.com/Cortex-Tech-Public/osquery/v3)
+[![Go Reference](https://pkg.go.dev/badge/github.com/Cortex-Tech-Public/osquery.svg)](https://pkg.go.dev/github.com/Cortex-Tech-Public/osquery)
 
 # osquery
 
@@ -37,7 +37,7 @@ This is an early release. The API may still change.
 ## Installation
 
 ```bash
-go get github.com/Cortex-Tech-Public/osquery/v3
+go get github.com/Cortex-Tech-Public/osquery
 ```
 
 ## Usage
@@ -51,7 +51,7 @@ import (
 	"context"
 	"log"
 
-	"github.com/Cortex-Tech-Public/osquery/v3"
+	"github.com/Cortex-Tech-Public/osquery"
 	"github.com/opensearch-project/opensearch-go/v4"
 )
 
@@ -180,10 +180,10 @@ To execute an arbitrary query or aggregation (including those not yet supported 
 Update your import path:
 
 ```bash
-go get github.com/Cortex-Tech-Public/osquery/v3
+go get github.com/Cortex-Tech-Public/osquery
 ```
 
-Replace all imports of `github.com/defensestation/osquery/v2` with `github.com/Cortex-Tech-Public/osquery/v3`. No API changes — the only requirement is opensearch-go v4.7.0 or later.
+Replace all imports of `github.com/defensestation/osquery/v2` with `github.com/Cortex-Tech-Public/osquery`. No API changes — the only requirement is opensearch-go v4.7.0 or later.
 
 ## License
 
