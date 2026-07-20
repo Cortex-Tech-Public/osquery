@@ -36,7 +36,7 @@
 //         "context"
 //         "log"
 //
-//         osquery "github.com/Cortex-Tech-Public/osquery/v3"
+//         "github.com/Cortex-Tech-Public/osquery"
 //         opensearch "github.com/opensearch-project/opensearch-go/v4"
 //     )
 //

@@ -4,7 +4,7 @@
 
 A non-obtrusive, idiomatic, and easy-to-use query and aggregation builder for the [official Go client](https://github.com/opensearch-project/opensearch-go) for [OpenSearch](https://opensearch.org/).
 
-This project is a maintained fork of [defensestation/osquery](https://github.com/defensestation/osquery), kept compatible with current releases of opensearch-go.
+This project is a maintained fork of defensestation/osquery, kept compatible with current releases of opensearch-go.
 
 Based on [esquery](https://github.com/aquasecurity/esquery), licensed under the Apache License 2.0.
 
@@ -51,7 +51,7 @@ import (
 	"context"
 	"log"
 
-	osquery "github.com/Cortex-Tech-Public/osquery/v3"
+	"github.com/Cortex-Tech-Public/osquery/v3"
 	"github.com/opensearch-project/opensearch-go/v4"
 )
 
@@ -184,10 +184,6 @@ go get github.com/Cortex-Tech-Public/osquery/v3
 ```
 
 Replace all imports of `github.com/defensestation/osquery/v2` with `github.com/Cortex-Tech-Public/osquery/v3`. No API changes — the only requirement is opensearch-go v4.7.0 or later.
-
-### From v2 (Cortex-Tech-Public)
-
-v3 requires opensearch-go v4.7.0+. The `Run` method signature is unchanged.
 
 ## License
 
